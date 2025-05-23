@@ -1,0 +1,2 @@
+C:/codes/flutter/klondike-game/android/app/.cxx/Debug/3y5x28fl/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/codes/flutter/klondike-game/android/app/.cxx/Debug/3y5x28fl/armeabi-v7a/CMakeFiles/rebuild_cache.dir

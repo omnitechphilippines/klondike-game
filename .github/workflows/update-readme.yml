@@ -1,0 +1,36 @@
+name: Update README with Latest Release Version
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main  # or your default branch
+
+      - name: Set up environment variables
+        run: |
+          echo "VERSION=${GITHUB_REF##*/}" >> $GITHUB_ENV
+          echo "ENCODED_VERSION=$(echo "${GITHUB_REF##*/}" | sed 's/+/%2B/g')" >> $GITHUB_ENV
+
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Replace version placeholders in README.md
+        run: |
+          sed -i "s/{{VERSION}}/$VERSION/g" README.md
+          sed -i "s/{{ENCODED_VERSION}}/$ENCODED_VERSION/g" README.md
+
+      - name: Commit and push README update
+        run: |
+          git add README.md
+          git commit -m "Update README with release version $VERSION"
+          git push origin HEAD

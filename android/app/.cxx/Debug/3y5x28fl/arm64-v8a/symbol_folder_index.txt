@@ -1,0 +1,1 @@
+C:\codes\flutter\klondike-game\build\app\intermediates\cxx\Debug\3y5x28fl\obj\arm64-v8a
