@@ -25,7 +25,9 @@ jobs:
       - name: Build Web
         run: |
           flutter build web --release
-          zip -r web-release.zip build/web
+          sudo apt-get update
+          sudo apt-get install -y p7zip-full
+          7z a web-release.7z build/web
 
       - name: Build APK
         run: |
@@ -35,7 +37,7 @@ jobs:
       - name: Rename artifacts with version
         run: |
           VERSION=${{ github.ref_name }}
-          mv web-release.zip web-release-$VERSION.zip
+          mv web-release.7z web-release-$VERSION.7z
           mv app-release.apk app-release-$VERSION.apk
 
       - name: Upload Artifacts
@@ -43,7 +45,7 @@ jobs:
         with:
           name: linux-artifacts
           path: |
-            web-release-${{ github.ref_name }}.zip
+            web-release-${{ github.ref_name }}.7z
             app-release-${{ github.ref_name }}.apk
 
   build-windows:
@@ -63,18 +65,18 @@ jobs:
       - name: Build Windows
         run: |
           flutter build windows --release
-          Compress-Archive -Path build/windows/runner/Release/* -DestinationPath windows-release.zip
+          & "C:\Program Files\7-Zip\7z.exe" a windows-release.7z build/windows/x64/runner/Release/*
 
       - name: Rename Windows artifact with version
         run: |
           $version = "${{ github.ref_name }}"
-          Rename-Item -Path "windows-release.zip" -NewName "windows-release-$version.zip"
+          Rename-Item -Path "windows-release.7z" -NewName "windows-release-$version.7z"
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: windows-artifacts
-          path: windows-release-${{ github.ref_name }}.zip
+          path: windows-release-${{ github.ref_name }}.7z
 
   release:
     name: Publish GitHub Release
